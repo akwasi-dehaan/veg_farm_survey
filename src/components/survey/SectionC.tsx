@@ -2,7 +2,7 @@ import React from "react";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { Checkbox } from "../ui/Checkbox";
-import { VEGETABLE_OPTIONS, YES_NO_OPTIONS } from "../../lib/types";
+import { VEGETABLE_OPTIONS, YES_NO_OPTIONS } from "@/lib/types";
 
 interface SectionCProps {
   data: {

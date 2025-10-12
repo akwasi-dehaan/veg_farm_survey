@@ -1,5 +1,5 @@
 import React from "react";
-import { Survey } from "../../lib/types";
+import { Survey } from "@/lib/types";
 
 // Custom SVG Icons
 const CalendarIcon = ({ className }: { className?: string }) => (

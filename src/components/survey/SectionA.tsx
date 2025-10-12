@@ -8,7 +8,7 @@ import {
   EDUCATION_OPTIONS,
   YES_NO_OPTIONS,
   OCCUPATION_OPTIONS,
-} from "../../lib/types";
+} from "@/lib/types";
 
 interface SectionAProps {
   data: {

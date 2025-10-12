@@ -1,5 +1,5 @@
 import React from "react";
-import { Survey } from "../../lib/types";
+import { Survey } from "@/lib/types";
 
 interface SurveyPreviewProps {
   data: Survey;

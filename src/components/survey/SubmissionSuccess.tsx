@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "../ui/Button";
-import { Survey } from "../../lib/types";
+import { Survey } from "@/lib/types";
 
 interface SubmissionSuccessProps {
   survey: Survey;

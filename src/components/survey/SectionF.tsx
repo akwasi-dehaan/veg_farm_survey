@@ -3,7 +3,7 @@ import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { Textarea } from "../ui/Textarea";
 import { Radio } from "../ui/Radio";
-import { CHALLENGE_OPTIONS, SEVERITY_OPTIONS } from "../../lib/types";
+import { CHALLENGE_OPTIONS, SEVERITY_OPTIONS } from "@/lib/types";
 
 interface SectionFProps {
   data: {

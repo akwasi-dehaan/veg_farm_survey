@@ -3,7 +3,7 @@ import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { Radio } from "../ui/Radio";
 import { Checkbox } from "../ui/Checkbox";
-import { YES_NO_OPTIONS } from "../../lib/types";
+import { YES_NO_OPTIONS } from "@/lib/types";
 
 interface SectionDProps {
   data: {

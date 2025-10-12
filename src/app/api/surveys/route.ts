@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Survey } from "../../../lib/types";
-import { getConnection } from "../../../lib/mysql";
+import { Survey } from "@/lib/types";
+import { getConnection } from "@/lib/mysql";
 
 export async function POST(request: NextRequest) {
   const connection = await getConnection();

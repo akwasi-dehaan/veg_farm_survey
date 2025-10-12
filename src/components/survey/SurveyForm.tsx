@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { Radio } from "@/components/ui/Radio";
 import { Notification } from "@/components/ui/Notification";
 import { EnumeratorInstructions } from "./EnumeratorInstructions";
-import { InitialDataCollection } from "./InitialDataCollection";
+// import { InitialDataCollection } from "./InitialDataCollection";
 import { SectionA } from "./SectionA";
 import { SectionB } from "./SectionB";
 import { SectionC } from "./SectionC";

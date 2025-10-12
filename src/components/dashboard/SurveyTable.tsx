@@ -3,7 +3,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { StatusIndicator } from "../shared/StatusIndicator";
-import { Survey } from "../../lib/types";
+import { Survey } from "@/lib/types";
 
 // Custom SVG Icons
 const SearchIcon = () => (

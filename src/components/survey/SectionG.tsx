@@ -1,7 +1,7 @@
 import React from "react";
 import { Radio } from "../ui/Radio";
 import { Checkbox } from "../ui/Checkbox";
-import { YES_NO_OPTIONS } from "../../lib/types";
+import { YES_NO_OPTIONS } from "@/lib/types";
 
 interface SectionGProps {
   data: {

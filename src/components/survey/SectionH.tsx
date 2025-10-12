@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "../ui/Input";
 import { Radio } from "../ui/Radio";
-import { YES_NO_OPTIONS } from "../../lib/types";
+import { YES_NO_OPTIONS } from "@/lib/types";
 
 interface SectionHProps {
   data: {
