@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { GlobalSyncProvider } from "@/components/GlobalSyncProvider";
 
 export const metadata: Metadata = {
   title: "Youth Vegetable Farming Survey",
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GlobalSyncProvider>{children}</GlobalSyncProvider>
+      </body>
     </html>
   );
 }

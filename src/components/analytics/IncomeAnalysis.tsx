@@ -181,17 +181,34 @@ export const IncomeAnalysis: React.FC<IncomeAnalysisProps> = ({ surveys }) => {
           Income vs Farm Size
         </h4>
         <ResponsiveContainer width="100%" height={300}>
-          <ScatterChart data={incomeVsFarmSize}>
+          <ScatterChart>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="farmSize" name="Farm Size (hectares)" />
-            <YAxis dataKey="income" name="Monthly Income" />
+            <XAxis
+              dataKey="farmSize"
+              name="Farm Size"
+              label={{
+                value: "Farm Size (hectares)",
+                position: "insideBottom",
+                offset: -5,
+              }}
+            />
+            <YAxis
+              dataKey="income"
+              name="Monthly Income"
+              label={{
+                value: "Monthly Income",
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
             <Tooltip
+              cursor={{ strokeDasharray: "3 3" }}
               formatter={(value, name) => [
                 name === "farmSize" ? `${value} hectares` : `${value}`,
                 name === "farmSize" ? "Farm Size" : "Income",
               ]}
             />
-            <Scatter dataKey="income" fill="#3B82F6" />
+            <Scatter data={incomeVsFarmSize} fill="#3B82F6" />
           </ScatterChart>
         </ResponsiveContainer>
       </div>

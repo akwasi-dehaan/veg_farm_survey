@@ -23,10 +23,12 @@ An offline-first data collection system designed for field researchers in rural 
 ### 🔧 Technical Features
 
 - **TypeScript**: Full type safety throughout the application
-- **Next.js 14**: Modern React framework with App Router
+- **Next.js 15**: Modern React framework with App Router
 - **Tailwind CSS**: Utility-first styling
+- **MySQL Database**: Persistent server-side storage
 - **IndexedDB**: Client-side database using Dexie.js
 - **Real-time Detection**: Online/offline status monitoring
+- **Advanced Analytics**: Comprehensive data visualization and insights
 
 ## Survey Sections
 
@@ -46,6 +48,7 @@ An offline-first data collection system designed for field researchers in rural 
 
 - Node.js 18+
 - npm or yarn
+- MySQL 8.0+ (XAMPP, MySQL Workbench, or cloud MySQL)
 
 ### Installation
 
@@ -62,13 +65,34 @@ cd youth-farming-survey
 npm install
 ```
 
-3. Run the development server:
+3. Setup MySQL database:
+
+```bash
+# Create database
+npm run create-db
+
+# Run migrations
+npm run migrate
+```
+
+4. Configure environment variables:
+
+```bash
+# Create .env.local file
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=youth_farming_survey
+DB_PORT=3306
+```
+
+5. Run the development server:
 
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Building for Production
 
@@ -93,6 +117,8 @@ npm start
 3. Filter by sync status (Pending/Synced/Failed)
 4. Search by respondent name or location
 5. Export data to JSON or CSV format
+6. View comprehensive analytics with visual charts
+7. Analyze demographics, farming practices, challenges, and income data
 
 ### Offline Usage
 
@@ -107,6 +133,7 @@ npm start
 - `GET /api/surveys` - Retrieve all surveys
 - `PUT /api/surveys` - Update survey data
 - `DELETE /api/surveys` - Delete survey data
+- `POST /api/sync` - Sync local IndexedDB data to MySQL server
 
 ## Data Storage
 
@@ -160,10 +187,12 @@ src/
 
 ### Key Technologies
 
-- **Next.js 14**: React framework with App Router
+- **Next.js 15**: React framework with App Router
 - **TypeScript**: Type-safe JavaScript
 - **Tailwind CSS**: Utility-first CSS framework
+- **MySQL2**: Server-side database
 - **Dexie.js**: IndexedDB wrapper
+- **Recharts**: Data visualization library
 - **Lucide React**: Icon library
 
 ## Deployment
@@ -208,13 +237,24 @@ For support and questions, please open an issue in the repository or contact the
 
 ## Roadmap
 
+### ✅ Completed Features
+
+- [x] Advanced analytics dashboard with interactive charts
+- [x] Data visualization (demographics, income, farming practices, challenges)
+- [x] MySQL database integration
+- [x] Real-time data synchronization
+- [x] Export to CSV/JSON formats
+- [x] Comprehensive filtering and search
+
+### 🔜 Future Enhancements
+
 - [ ] Photo capture and storage
 - [ ] GPS coordinates capture
 - [ ] Signature capture for consent
-- [ ] Multi-language support
+- [ ] Multi-language support (French, Local languages)
 - [ ] Offline map integration
-- [ ] Advanced analytics dashboard
-- [ ] Data visualization charts
 - [ ] Bulk import from CSV
 - [ ] User authentication
 - [ ] Role-based access control
+- [ ] Advanced data analytics (predictive models)
+- [ ] Mobile app version (React Native)

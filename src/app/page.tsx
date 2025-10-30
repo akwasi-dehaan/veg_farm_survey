@@ -21,11 +21,11 @@ export default function Home() {
                 Start New Survey
               </Button>
             </Link>
-            <Link href="/dashboard">
+            {/* <Link href="/dashboard">
               <Button variant="outline" className="w-full sm:w-auto">
                 View Dashboard
               </Button>
-            </Link>
+            </Link> */}
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mt-16">

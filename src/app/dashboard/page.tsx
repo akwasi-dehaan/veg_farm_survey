@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { SyncButton } from "../../components/shared/SyncButton";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { syncSurveys } from "@/lib/sync";
 import { SurveyTable } from "../../components/dashboard/SurveyTable";
 import { SurveyDetail } from "../../components/dashboard/SurveyDetail";
 import { AnalyticsDashboard } from "../../components/analytics/AnalyticsDashboard";
@@ -90,7 +89,7 @@ const TableIcon = () => (
   </svg>
 );
 import { Survey, NotificationState } from "@/lib/types";
-import { getAllSurveys, deleteSurvey, getSurveyCounts } from "@/lib/db";
+import { getAllSurveys, deleteSurvey } from "@/lib/db";
 import { exportSurveys } from "@/lib/export";
 import { useRouter } from "next/navigation";
 
@@ -114,7 +113,7 @@ export default function DashboardPage() {
   });
 
   const router = useRouter();
-  const isOnline = useOnlineStatus();
+  const { isOnline } = useOnlineStatus();
 
   // Fetch surveys from server (MySQL)
   const fetchServerSurveys = async (): Promise<Survey[]> => {
@@ -238,67 +237,26 @@ export default function DashboardPage() {
     }
   };
 
-  // Automatic sync when online
-  const autoSync = async () => {
-    if (!isOnline) return;
-
-    const pendingSurveys = surveys.filter((s) => s.syncStatus === "pending");
-    if (pendingSurveys.length === 0) return;
-
-    try {
-      console.log(`Auto-syncing ${pendingSurveys.length} surveys...`);
-      const result = await syncSurveys(pendingSurveys);
-
-      if (result.success) {
-        console.log(
-          `Auto-sync completed: ${result.syncedCount} surveys synced`
-        );
-        // Refresh data after successful sync
-        loadSurveys();
-      } else {
-        console.log(`Auto-sync failed: ${result.failedCount} surveys failed`);
-      }
-    } catch (error) {
-      console.error("Auto-sync error:", error);
-    }
-  };
-
   useEffect(() => {
     loadSurveys();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-sync when coming online or when surveys change
+  // Listen for global sync events to refresh data
   useEffect(() => {
-    if (isOnline && surveys.length > 0) {
-      const pendingCount = surveys.filter(
-        (s) => s.syncStatus === "pending"
-      ).length;
-      if (pendingCount > 0) {
-        // Delay auto-sync to avoid conflicts with initial load
-        const timer = setTimeout(() => {
-          autoSync();
-        }, 2000);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [isOnline, surveys.length]);
+    const handleSyncComplete = () => {
+      console.log("🔄 Dashboard: Refreshing data after global sync");
+      loadSurveys();
+    };
 
-  // Periodic auto-sync when online (every 5 minutes)
-  useEffect(() => {
-    if (!isOnline) return;
+    // Listen for custom sync events
+    window.addEventListener("globalSyncComplete", handleSyncComplete);
 
-    const interval = setInterval(() => {
-      const pendingSurveys = surveys.filter((s) => s.syncStatus === "pending");
-      if (pendingSurveys.length > 0) {
-        console.log(
-          `Periodic auto-sync: ${pendingSurveys.length} surveys pending`
-        );
-        autoSync();
-      }
-    }, 5 * 60 * 1000); // 5 minutes
-
-    return () => clearInterval(interval);
-  }, [isOnline, surveys]);
+    return () => {
+      window.removeEventListener("globalSyncComplete", handleSyncComplete);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleViewSurvey = (survey: Survey) => {
     setSelectedSurvey(survey);
@@ -314,7 +272,44 @@ export default function DashboardPage() {
     }
 
     try {
-      await deleteSurvey(surveyId);
+      let localDeleteSuccess = false;
+      let serverDeleteSuccess = false;
+
+      // Delete from local IndexedDB
+      try {
+        await deleteSurvey(surveyId);
+        localDeleteSuccess = true;
+      } catch {
+        // Don't throw - survey might only exist on server
+      }
+
+      // Also delete from server (MySQL) if online
+      if (isOnline) {
+        try {
+          const response = await fetch(
+            `/api/surveys?surveyId=${encodeURIComponent(surveyId)}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (response.ok) {
+            serverDeleteSuccess = true;
+          }
+        } catch {
+          // Silent fail - survey might not exist on server
+        }
+      } else {
+        serverDeleteSuccess = true; // Consider success if offline and local delete worked
+      }
+
+      // Check if at least one delete succeeded
+      if (!localDeleteSuccess && !serverDeleteSuccess) {
+        throw new Error(
+          "Failed to delete survey from both local and server storage"
+        );
+      }
+
       await loadSurveys();
       setNotification({
         show: true,
@@ -322,11 +317,12 @@ export default function DashboardPage() {
         message: "Survey deleted successfully",
       });
     } catch (error) {
-      console.error("Error deleting survey:", error);
       setNotification({
         show: true,
         type: "error",
-        message: "Failed to delete survey",
+        message: `Failed to delete survey: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       });
     }
   };
